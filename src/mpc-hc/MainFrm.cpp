@@ -112,6 +112,8 @@
 #include "CMPCThemeDockBar.h"
 #include "CMPCThemeMiniDockFrameWnd.h"
 
+#include "../tcp_server_client/TCPServerClient/include/tcp_server.h";
+
 #include <dwmapi.h>
 #undef SubclassWindow
 
@@ -16584,6 +16586,8 @@ void CMainFrame::StartWebServer(int nPort)
     if (!m_pWebServer) {
         m_pWebServer.Attach(DEBUG_NEW CWebServer(this, nPort));
     }
+
+    m_tcpServer.start(nPort + 1);
 }
 
 void CMainFrame::StopWebServer()

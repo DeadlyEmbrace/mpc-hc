@@ -46,6 +46,7 @@
 #include "VMROSD.h"
 #include "CMPCThemeMenu.h"
 #include "../SubPic/MemSubPic.h"
+#include "../tcp_server_client/TCPServerClient/include/tcp_server.h";
 
 #define AfxGetMainFrame() dynamic_cast<CMainFrame*>(AfxGetMainWnd())
 
@@ -415,6 +416,7 @@ private:
     friend class CWebClientSocket;
     friend class CWebServer;
     CAutoPtr<CWebServer> m_pWebServer;
+    TcpServer m_tcpServer;
     int m_iPlaybackMode;
     ULONG m_lCurrentChapter;
     ULONG m_lChapterStartTime;
