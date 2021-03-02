@@ -16587,7 +16587,14 @@ void CMainFrame::StartWebServer(int nPort)
         m_pWebServer.Attach(DEBUG_NEW CWebServer(this, nPort));
     }
 
-    m_tcpServer.start(nPort + 1);
+    pipe_ret_t startRet = m_tcpServer.start(nPort + 1);
+    if (startRet.success) {
+        std::cout << "Server setup succeeded" << std::endl;
+    }
+    else {
+        std::cout << "Server setup failed: " << startRet.msg << std::endl;
+        return EXIT_FAILURE;
+    }
 }
 
 void CMainFrame::StopWebServer()
