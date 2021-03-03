@@ -21,7 +21,7 @@ void onIncomingTcpMessage(const Client& client, const char* msg, size_t size)
 void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* msg, size_t size)
 {
     Document document;
-    if (document.Parse(msg).HasParseError())
+    if (!document.Parse(msg).HasParseError())
     {
         std::string command = document["Command"].GetString();
         std::string parameters = document["Parameters"].GetString();
