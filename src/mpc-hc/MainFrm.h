@@ -46,7 +46,7 @@
 #include "VMROSD.h"
 #include "CMPCThemeMenu.h"
 #include "../SubPic/MemSubPic.h"
-#include "../tcp_server_client/TCPServerClient/include/tcp_server.h";
+#include "MPCTCPServer.h"
 
 #define AfxGetMainFrame() dynamic_cast<CMainFrame*>(AfxGetMainWnd())
 
@@ -416,7 +416,11 @@ private:
     friend class CWebClientSocket;
     friend class CWebServer;
     CAutoPtr<CWebServer> m_pWebServer;
-    TcpServer m_tcpServer;
+
+    // TCP Server and observer
+    friend class MPCTCPServer;
+    MPCTCPServer m_mpcTcpServer;
+
     int m_iPlaybackMode;
     ULONG m_lCurrentChapter;
     ULONG m_lChapterStartTime;
@@ -723,6 +727,7 @@ protected:  // control bar embedded members
     CPlayerStatusBar m_wndStatusBar;
 
     CPlayerSubresyncBar m_wndSubresyncBar;
+    friend class MPCTCPServer;
     CPlayerPlaylistBar m_wndPlaylistBar;
     CPlayerCaptureBar m_wndCaptureBar;
     CPlayerNavigationBar m_wndNavigationBar;

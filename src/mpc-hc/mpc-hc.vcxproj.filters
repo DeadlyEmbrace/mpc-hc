@@ -608,6 +608,7 @@
     <ClCompile Include="PlayerPreView.cpp">
       <Filter>Toolbars</Filter>
     </ClCompile>
+    <ClCompile Include="MPCTCPServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppSettings.h">
@@ -1149,6 +1150,7 @@
     <ClInclude Include="PlayerPreView.h">
       <Filter>Toolbars</Filter>
     </ClInclude>
+    <ClInclude Include="MPCTCPServer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ani.avi">
