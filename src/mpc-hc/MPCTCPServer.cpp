@@ -111,7 +111,7 @@ void waitForClients(TcpServer& server)
 {
     while (1) {
         Client client = server.acceptClient(0);
-        sendMessageToClient(std::ref(server), std::ref(client), "Connection", "\"Connected\":true");
+        sendMessageToClient(std::ref(server), std::ref(client), "Connection", "{\"Connected\":true}");
         Sleep(1);
     }
 }
