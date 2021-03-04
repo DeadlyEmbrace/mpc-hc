@@ -2381,6 +2381,8 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
             }
     }
 
+    SendStatusToTcpClients();
+
     __super::OnTimer(nIDEvent);
 }
 
@@ -16603,8 +16605,28 @@ LRESULT CMainFrame::OnTcpMessage(WPARAM wParam, LPARAM lParam)
         m_wndPlaylistBar.Open(fns, false);
         OpenCurPlaylistItem();
     }
-    
+    if (data->Command == "Play")
+    {
+        OnApiPlay();
+    }
+    if (data->Command == "Stop")
+    {
+        OnPlayStop();
+    }
+    if (data->Command == "Pause")
+    {
+        OnApiPause();
+    }
+
     return 0;
+}
+
+/// <summary>
+/// Sends the current player status to all TCP clients
+/// </summary>
+void CMainFrame::SendStatusToTcpClients()
+{
+    m_mpcTcpServer.sendStateToClients();
 }
 
 void CMainFrame::StartWebServer(int nPort)

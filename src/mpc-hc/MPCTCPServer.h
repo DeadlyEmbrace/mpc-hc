@@ -13,11 +13,13 @@ private:
     // TCP Server and observer
     TcpServer m_tcpServer;
     server_observer_t m_observer;
+    void sendMessageToAllClients(std::string command, std::string parameters);
 
 public:
     MPCTCPServer(CMainFrame* mainFrame);
     void handleIncomingTcpMessage(const Client& client, const char* msg, size_t size);
     void startTcpServer(int nPort);
+    void sendStateToClients();
 };
 
 struct TcpCommand

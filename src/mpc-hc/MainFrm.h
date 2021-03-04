@@ -417,9 +417,20 @@ private:
     friend class CWebServer;
     CAutoPtr<CWebServer> m_pWebServer;
 
-    // TCP Server and observer
+    /// <summary>
+    /// TCP Server instance
+    /// </summary>
     MPCTCPServer m_mpcTcpServer;
+
+    /// <summary>
+    /// Handles TCP Server messages
+    /// </summary>
     LRESULT OnTcpMessage(WPARAM wParam, LPARAM lParam);
+
+    /// <summary>
+    /// Sends the current player status to all TCP clients
+    /// </summary>
+    void CMainFrame::SendStatusToTcpClients();
 
     int m_iPlaybackMode;
     ULONG m_lCurrentChapter;

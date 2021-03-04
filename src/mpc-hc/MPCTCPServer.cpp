@@ -2,6 +2,7 @@
 #include "MPCTCPServer.h"
 #include <codecvt>
 #include "rapidjson/include/rapidjson/document.h";
+#include "text.h";
 
 #include "MainFrm.h";
 
@@ -18,6 +19,12 @@ void onIncomingTcpMessage(const Client& client, const char* msg, size_t size)
     MPCTCPServer::self->handleIncomingTcpMessage(client, msg, size);
 }
 
+/// <summary>
+/// Handle incoming TCP messages
+/// </summary>
+/// <param name="client">Client the message was received from</param>
+/// <param name="msg">Received message</param>
+/// <param name="size">Size of the message</param>
 void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* msg, size_t size)
 {
     Document document;
@@ -26,16 +33,61 @@ void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* ms
         std::string command = document["Command"].GetString();
         std::string parameters = document["Parameters"].GetString();
 
-        // TODO - We can probably remove this and rather handle the commands on the other side
-        if (command == "OpenFile")
-        {
-            CMainFrame* frame = MPCTCPServer::innerMainFrame;
-            TcpCommand* tcpCommand = new TcpCommand();
-            tcpCommand->Command = command;
-            tcpCommand->Parameters = parameters;
-            frame->SendMessage(WM_TCP_COMMAND, reinterpret_cast<WPARAM>(tcpCommand));
-        }
+        CMainFrame* frame = MPCTCPServer::innerMainFrame;
+        TcpCommand* tcpCommand = new TcpCommand();
+        tcpCommand->Command = command;
+        tcpCommand->Parameters = parameters;
+        frame->SendMessage(WM_TCP_COMMAND, reinterpret_cast<WPARAM>(tcpCommand));
     }
+}
+
+/// <summary>
+/// Send the current playback state to clients
+/// </summary>
+void MPCTCPServer::sendStateToClients()
+{
+    CMainFrame* frame = MPCTCPServer::innerMainFrame;
+    CString path = frame->m_wndPlaylistBar.GetCurFileName();
+    CString file = frame->GetFileName();
+
+    OAFilterState fs = frame->GetMediaState();
+    CString state;
+    state.Format(_T("%d"), fs);
+    CString statestring;
+    switch (fs) {
+    case State_Stopped:
+        statestring.LoadString(IDS_CONTROLS_STOPPED);
+        break;
+    case State_Paused:
+        statestring.LoadString(IDS_CONTROLS_PAUSED);
+        break;
+    case State_Running:
+        statestring.LoadString(IDS_CONTROLS_PLAYING);
+        break;
+    default:
+        statestring = _T("N/A");
+        break;
+    }
+
+    CString position = NumToCString(std::lround(frame->GetPos() / 10000i64));
+    CString duration = NumToCString(std::lround(frame->GetDur() / 10000i64));
+
+    std::string fullPath = CStringA(path) + "\\" + CStringA(file);
+    CString escapedPath = std::regex_replace(fullPath, std::regex("\\\\"), "\\\\").c_str();
+    std::string parameter = "{\"File\":\"" + CStringA(escapedPath) + "\", \"Position\":\"" + CStringA(position) + "\",\"Duration\":\"" + CStringA(duration) + "\",\"State\": \"" + CStringA(statestring) + "\"}";
+    sendMessageToAllClients("Status", parameter);
+}
+
+/// <summary>
+/// Send a message to all clients as a JSON string
+/// </summary>
+/// <param name="server">TCPServer instance to use for sending the message</param>
+/// <param name="command">Command to send to the client</param>
+/// <param name="parameters">Parameters of the command to sned to the client</param>
+void MPCTCPServer::sendMessageToAllClients(std::string command, std::string parameters)
+{
+    std::string msg = "{ \"Command\": \"" + command + "\",\"Parameters\":" + parameters + "}\r\n";
+    m_tcpServer.sendToAllClients(msg.c_str(), msg.size());
 }
 
 /// <summary>
@@ -47,7 +99,7 @@ void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* ms
 /// <param name="parameters">Parameters of the command to sned to the client</param>
 void sendMessageToClient(TcpServer& server, Client& client, std::string command, std::string parameters)
 {
-    std::string msg = "{ \"Command\": \"" + command + "\",\"Parameters\":" + parameters + "\"}\r\n";
+    std::string msg = "{ \"Command\": \"" + command + "\",\"Parameters\":" + parameters + "}\r\n";
     server.sendToClient(client, msg.c_str(), msg.size());
 }
 
@@ -59,7 +111,7 @@ void waitForClients(TcpServer& server)
 {
     while (1) {
         Client client = server.acceptClient(0);
-        sendMessageToClient(std::ref(server), std::ref(client), "Greeting", "Hello client");
+        sendMessageToClient(std::ref(server), std::ref(client), "Connection", "\"Connected\":true");
         Sleep(1);
     }
 }
