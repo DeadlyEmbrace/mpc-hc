@@ -1897,6 +1897,8 @@ double g_dRate = 1.0;
 
 void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
+    SendStatusToTcpClients();
+
     switch (nIDEvent) {
         case TIMER_WINDOW_FULLSCREEN:
             if (AfxGetAppSettings().iFullscreenDelay > 0 && IsWindows8OrGreater()) {//DWMWA_CLOAK not supported on 7
@@ -2380,8 +2382,6 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                 ASSERT(FALSE);
             }
     }
-
-    SendStatusToTcpClients();
 
     __super::OnTimer(nIDEvent);
 }
