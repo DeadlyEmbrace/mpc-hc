@@ -26,17 +26,14 @@ void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* ms
         std::string command = document["Command"].GetString();
         std::string parameters = document["Parameters"].GetString();
 
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-        std::wstring wide = converter.from_bytes(parameters);
-        LPCWSTR result = wide.c_str();
-
+        // TODO - We can probably remove this and rather handle the commands on the other side
         if (command == "OpenFile")
         {
-            CAtlList<CString> fns;
-            fns.AddHead(result);
             CMainFrame* frame = MPCTCPServer::innerMainFrame;
-            frame->m_wndPlaylistBar.Open(fns, false);
-            frame->OpenCurPlaylistItem();
+            TcpCommand* tcpCommand = new TcpCommand();
+            tcpCommand->Command = command;
+            tcpCommand->Parameters = parameters;
+            frame->SendMessage(WM_TCP_COMMAND, reinterpret_cast<WPARAM>(tcpCommand));
         }
     }
 }

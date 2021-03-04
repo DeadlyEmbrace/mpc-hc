@@ -19,3 +19,9 @@ public:
     void handleIncomingTcpMessage(const Client& client, const char* msg, size_t size);
     void startTcpServer(int nPort);
 };
+
+struct TcpCommand
+{
+    std::string Command;
+    std::string Parameters;
+};

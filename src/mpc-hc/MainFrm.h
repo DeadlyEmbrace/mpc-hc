@@ -418,8 +418,8 @@ private:
     CAutoPtr<CWebServer> m_pWebServer;
 
     // TCP Server and observer
-    friend class MPCTCPServer;
     MPCTCPServer m_mpcTcpServer;
+    LRESULT OnTcpMessage(WPARAM wParam, LPARAM lParam);
 
     int m_iPlaybackMode;
     ULONG m_lCurrentChapter;
