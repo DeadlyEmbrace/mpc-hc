@@ -159,7 +159,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfribidi", "src\thirdpart
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LAV", "LAV", "{B918239A-6FD1-4F96-9484-0F0824A401AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPServerClient", "tcp_server_client\TCPServerClient\TCPServerClient.vcxproj", "{F96B9860-B10D-430B-ABA4-372FB0A5DD1B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPServerClient", "src\thirdparty\tcp_server_client\TCPServerClient\TCPServerClient.vcxproj", "{F96B9860-B10D-430B-ABA4-372FB0A5DD1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

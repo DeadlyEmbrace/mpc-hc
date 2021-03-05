@@ -49,6 +49,6 @@
 [submodule "src/thirdparty/libiconv/libiconv-for-Windows"]
 	path = src/thirdparty/libiconv/libiconv-for-Windows
 	url = https://github.com/pffang/libiconv-for-Windows.git
-[submodule "tcp_server_client"]
-	path = tcp_server_client
-	url = https://github.com/NinetailLabs/tcp_server_client.git
+[submodule "src/thirdparty/tcp_server_client"]
+	path = src/thirdparty/tcp_server_client
+	url = ../../NinetailLabs/tcp_server_client.git

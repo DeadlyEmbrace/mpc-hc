@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "../tcp_server_client/TCPServerClient/include/tcp_server.h";
+#include "tcp_server_client/TCPServerClient/include/tcp_server.h";
+#include "tcp_server_client/TCPServerClient/include/pipe_ret_t.h";
 
 class CMainFrame;
 

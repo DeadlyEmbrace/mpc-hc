@@ -112,8 +112,6 @@
 #include "CMPCThemeDockBar.h"
 #include "CMPCThemeMiniDockFrameWnd.h"
 
-#include "../tcp_server_client/TCPServerClient/include/tcp_server.h";
-
 #include <dwmapi.h>
 #undef SubclassWindow
 

@@ -621,9 +621,6 @@
     <ProjectReference Include="..\..\build\BuildConfig.vcxproj">
       <Project>{981574ae-5a5e-4f27-bdf1-1b841e374cff}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\tcp_server_client\TCPServerClient\TCPServerClient.vcxproj">
-      <Project>{f96b9860-b10d-430b-aba4-372fb0a5dd1b}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\DeCSS\DeCSS.vcxproj">
       <Project>{1a2dfd1a-3c6c-44d1-909d-294af646b575}</Project>
     </ProjectReference>
@@ -739,6 +736,9 @@
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\thirdparty\tcp_server_client\TCPServerClient\TCPServerClient.vcxproj">
+      <Project>{f96b9860-b10d-430b-aba4-372fb0a5dd1b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\thirdparty\tinyxml2\tinyxml2.vcxproj">
       <Project>{e02f0c35-fb01-4059-90f9-9ac19dc22fba}</Project>

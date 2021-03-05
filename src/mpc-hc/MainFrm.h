@@ -46,6 +46,7 @@
 #include "VMROSD.h"
 #include "CMPCThemeMenu.h"
 #include "../SubPic/MemSubPic.h"
+#include "tcp_server_client/TCPServerClient/include/tcp_server.h";
 #include "MPCTCPServer.h"
 
 #define AfxGetMainFrame() dynamic_cast<CMainFrame*>(AfxGetMainWnd())
