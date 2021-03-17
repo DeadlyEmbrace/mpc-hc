@@ -1895,8 +1895,6 @@ double g_dRate = 1.0;
 
 void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
-    SendStatusToTcpClients();
-
     switch (nIDEvent) {
         case TIMER_WINDOW_FULLSCREEN:
             if (AfxGetAppSettings().iFullscreenDelay > 0 && IsWindows8OrGreater()) {//DWMWA_CLOAK not supported on 7
@@ -1910,6 +1908,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
             ASSERT(streampospoller_active);
             if (streampospoller_active && GetLoadState() == MLS::LOADED) {
                 REFERENCE_TIME rtNow = 0, rtDur = 0;
+
                 switch (GetPlaybackMode()) {
                     case PM_FILE:
                         g_bExternalSubtitleTime = false;
@@ -16627,6 +16626,16 @@ void CMainFrame::SendStatusToTcpClients()
     m_mpcTcpServer.sendStateToClients();
 }
 
+void CMainFrame::SendPositionToClients()
+{
+    m_mpcTcpServer.sendProgressToClients();
+}
+
+void CMainFrame::SendPlaybackStatusToClients()
+{
+    m_mpcTcpServer.sendPlaybackStatusToClients();
+}
+
 void CMainFrame::StartWebServer(int nPort)
 {
     if (!m_pWebServer) {
@@ -17183,6 +17192,7 @@ void CMainFrame::SetPlayState(MPC_PLAYSTATE iState)
 {
     m_Lcd.SetPlayState((CMPC_Lcd::PlayState)iState);
     SendAPICommand(CMD_PLAYMODE, L"%d", iState);
+    SendPlaybackStatusToClients();
 
     if (m_fEndOfStream) {
         SendAPICommand(CMD_NOTIFYENDOFSTREAM, L"\0");     // do not pass NULL here!

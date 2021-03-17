@@ -99,6 +99,54 @@ void MPCTCPServer::sendStateToClients()
 }
 
 /// <summary>
+/// Send the current playback position to all clients
+/// </summary>
+void MPCTCPServer::sendProgressToClients()
+{
+    CMainFrame* frame = MPCTCPServer::innerMainFrame;
+
+    CString position = NumToCString(std::lround(frame->GetPos() / 10000i64));
+    CString duration = NumToCString(std::lround(frame->GetDur() / 10000i64));
+
+    std::string parameter = "{\"Position\":\"" + CStringA(position) + "\",\"Duration\":\"" + CStringA(duration) + "\"}";
+    sendMessageToAllClients("Position", parameter);
+}
+
+/// <summary>
+/// Send the current playback status to all clients
+/// </summary>
+void MPCTCPServer::sendPlaybackStatusToClients()
+{
+    CMainFrame* frame = MPCTCPServer::innerMainFrame;
+    CString path = frame->m_wndPlaylistBar.GetCurFileName();
+    CString file = frame->GetFileName();
+
+    OAFilterState fs = frame->GetMediaState();
+    CString state;
+    state.Format(_T("%d"), fs);
+    CString statestring;
+    switch (fs) {
+    case State_Stopped:
+        statestring.LoadString(IDS_CONTROLS_STOPPED);
+        break;
+    case State_Paused:
+        statestring.LoadString(IDS_CONTROLS_PAUSED);
+        break;
+    case State_Running:
+        statestring.LoadString(IDS_CONTROLS_PLAYING);
+        break;
+    default:
+        statestring = _T("N/A");
+        break;
+    }
+
+    std::string fullPath = CStringA(path) + "\\" + CStringA(file);
+    CString escapedPath = std::regex_replace(fullPath, std::regex("\\\\"), "\\\\").c_str();
+    std::string parameter = "{\"File\":\"" + CStringA(escapedPath) + "\",\"State\": \"" + CStringA(statestring) + "\"}";
+    sendMessageToAllClients("PlaybackStateChange", parameter);
+}
+
+/// <summary>
 /// Send a message to all clients as a JSON string
 /// </summary>
 /// <param name="server">TCPServer instance to use for sending the message</param>

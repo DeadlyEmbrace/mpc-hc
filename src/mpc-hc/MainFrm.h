@@ -433,6 +433,16 @@ private:
     /// </summary>
     void CMainFrame::SendStatusToTcpClients();
 
+    /// <summary>
+    /// Sends the current playback position to all TCP clients
+    /// </summary>
+    void CMainFrame::SendPositionToClients();
+
+    /// <summary>
+    /// Sends the current playback status to all TCP clients
+    /// </summary>
+    void CMainFrame::SendPlaybackStatusToClients();
+
     int m_iPlaybackMode;
     ULONG m_lCurrentChapter;
     ULONG m_lChapterStartTime;

@@ -41,6 +41,8 @@ public:
     void handleIncomingTcpMessage(const Client& client, const char* msg, size_t size);
     void startTcpServer(int nPort);
     void sendStateToClients();
+    void sendProgressToClients();
+    void sendPlaybackStatusToClients();
 };
 
 struct TcpCommand
