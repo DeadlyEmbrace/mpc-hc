@@ -83,6 +83,15 @@ void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* ms
         std::string command = document["Command"].GetString();
         std::string parameters = document["Parameters"].GetString();
 
+        /*
+         * TODO
+         * Get current playlist
+         * Insert into playlist (add index entry to JSON)
+         * Delete from playlist (index value only)
+         * Set currently playing index (index only)
+         * Move entry in playlist (uses two index value, movefrom and moveto)
+         */
+
         if (command == "GetCurrentStatus")
         {
             sendStateToClient(client);
