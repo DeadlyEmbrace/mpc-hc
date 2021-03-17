@@ -429,14 +429,14 @@ private:
     LRESULT OnTcpMessage(WPARAM wParam, LPARAM lParam);
 
     /// <summary>
-    /// Sends the current player status to all TCP clients
-    /// </summary>
-    void CMainFrame::SendStatusToTcpClients();
-
-    /// <summary>
     /// Sends the current playback position to all TCP clients
     /// </summary>
-    void CMainFrame::SendPositionToClients();
+    void CMainFrame::SendPositionToClients(REFERENCE_TIME pos, REFERENCE_TIME dur);
+
+    /// <summary>
+    /// The last position that was reported to TCP clients
+    /// </summary>
+    REFERENCE_TIME m_tcpLastPosition;
 
     /// <summary>
     /// Sends the current playback status to all TCP clients

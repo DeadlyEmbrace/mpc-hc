@@ -2012,6 +2012,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                 m_OSD.SetPos(rtNow);
                 m_Lcd.SetMediaRange(0, rtDur);
                 m_Lcd.SetMediaPos(rtNow);
+                SendPositionToClients(rtNow, rtDur);
 
                 if (m_pCAP) {
                     if (g_bExternalSubtitleTime) {
@@ -3453,6 +3454,7 @@ void CMainFrame::OnMenuFilters()
 void CMainFrame::OnUpdatePlayerStatus(CCmdUI* pCmdUI)
 {
     if (GetLoadState() == MLS::LOADING) {
+        SendPlaybackStatusToClients();
         m_wndStatusBar.SetStatusMessage(StrRes(IDS_CONTROLS_OPENING));
         if (AfxGetAppSettings().bUseEnhancedTaskBar && m_pTaskbarList) {
             m_pTaskbarList->SetProgressState(m_hWnd, TBPF_INDETERMINATE);
@@ -16618,17 +16620,15 @@ LRESULT CMainFrame::OnTcpMessage(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/// <summary>
-/// Sends the current player status to all TCP clients
-/// </summary>
-void CMainFrame::SendStatusToTcpClients()
+void CMainFrame::SendPositionToClients(REFERENCE_TIME pos, REFERENCE_TIME dur)
 {
-    m_mpcTcpServer.sendStateToClients();
-}
+    if (pos > 0 && m_tcpLastPosition == pos)
+    {
+        return;
+    }
 
-void CMainFrame::SendPositionToClients()
-{
-    m_mpcTcpServer.sendProgressToClients();
+    m_tcpLastPosition = pos;
+    m_mpcTcpServer.sendProgressToClients(pos, dur);
 }
 
 void CMainFrame::SendPlaybackStatusToClients()

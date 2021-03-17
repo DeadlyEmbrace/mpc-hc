@@ -36,12 +36,46 @@ private:
     server_observer_t m_observer;
     void sendMessageToAllClients(std::string command, std::string parameters);
 
+    /// <summary>
+    /// Sends a message to a specific client
+    /// </summary>
+    /// <param name="client">The client to send the message to</param>
+    /// <param name="command">The command to send to the client</param>
+    /// <param name="parameters">The parameter of the command to send to the client</param>
+    void sendMessageToSpecificClient(const Client& client, std::string command, std::string parameters);
+
+    /// <summary>
+    /// Retrieve the playback status as a parameter string that can be sent to client(s)
+    /// </summary>
+    /// <returns>Playback status as a parameter string</returns>
+    std::string getPlaybackStatus();
+
+    /// <summary>
+    /// Convert the playback position and duration to a parameter string that can be send to client(s)
+    /// </summary>
+    /// <param name="pos">Current playback position</param>
+    /// <param name="dur">Current file`s duration</param>
+    /// <returns>Playback position and duration as a parameter string</returns>
+    std::string getPlaybackPositionParameter(REFERENCE_TIME pos, REFERENCE_TIME dur);
+
+    /// <summary>
+    /// Send the current playback status to a specific client
+    /// </summary>
+    /// <param name="client">Client to send the playback status to</param>
+    void sendPlaybackStatusToClient(const Client& client);
+
+    /// <summary>
+    /// Send the current player status to a client.
+    /// This will simply invoke all of the status details responses one by one
+    /// </summary>
+    /// <param name="client">Client to send the status to</param>
+    void sendStateToClient(const Client& client);
+
 public:
     MPCTCPServer(CMainFrame* mainFrame);
     void handleIncomingTcpMessage(const Client& client, const char* msg, size_t size);
     void startTcpServer(int nPort);
-    void sendStateToClients();
-    void sendProgressToClients();
+    void sendProgressToClients(REFERENCE_TIME pos, REFERENCE_TIME dur);
     void sendPlaybackStatusToClients();
 };
 
