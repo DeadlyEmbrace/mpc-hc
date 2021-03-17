@@ -16623,6 +16623,10 @@ LRESULT CMainFrame::OnTcpMessage(WPARAM wParam, LPARAM lParam)
         LPCWSTR result = wide.c_str();
         m_OSD.DisplayMessage(OSD_TOPLEFT, result);
     }
+    if (data->Command == "ToggleFullscreen")
+    {
+        OnViewFullscreen();
+    }
 
     return 0;
 }

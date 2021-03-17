@@ -22,13 +22,16 @@
 
 #include "tcp_server_client/TCPServerClient/include/tcp_server.h";
 #include "tcp_server_client/TCPServerClient/include/pipe_ret_t.h";
+#include "mplayerc.h";
 
 class CMainFrame;
 
 class MPCTCPServer {
+
 public:
     inline static CMainFrame* innerMainFrame;
     inline static MPCTCPServer* self;
+    EventClient m_eventc;
 
 private:
     // TCP Server and observer
@@ -70,6 +73,12 @@ private:
     /// </summary>
     /// <param name="client">Client to send the status to</param>
     void sendStateToClient(const Client& client);
+
+    /// <summary>
+    /// Handle event callbacks
+    /// </summary>
+    /// <param name="ev">Event to handle</param>
+    void EventCallback(MpcEvent ev);
 
 public:
     MPCTCPServer(CMainFrame* mainFrame);

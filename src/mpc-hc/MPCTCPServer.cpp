@@ -31,7 +31,37 @@ using namespace rapidjson;
 MPCTCPServer::MPCTCPServer(CMainFrame* mainFrame) {
     MPCTCPServer::innerMainFrame = mainFrame;
     MPCTCPServer::self = this;
+    GetEventd().Connect(m_eventc, {
+       MpcEvent::SWITCHED_TO_FULLSCREEN,
+       MpcEvent::SWITCHED_TO_FULLSCREEN_D3D,
+       MpcEvent::SWITCHED_FROM_FULLSCREEN,
+        }, std::bind(&MPCTCPServer::EventCallback, this, std::placeholders::_1));
 };
+
+void MPCTCPServer::EventCallback(MpcEvent ev)
+{
+    std::string isFullscreen = "false";
+    bool fullScreenChanged = false;
+    switch (ev) {
+    case MpcEvent::SWITCHED_TO_FULLSCREEN:
+    case MpcEvent::SWITCHED_TO_FULLSCREEN_D3D:
+        isFullscreen = "true";
+        fullScreenChanged = true;
+        break;
+    case MpcEvent::SWITCHED_FROM_FULLSCREEN:
+        isFullscreen = "false";
+        fullScreenChanged = true;
+        break;
+    default:
+        ASSERT(FALSE);
+    }
+
+    if (fullScreenChanged)
+    {
+        sendMessageToAllClients("Fullscreen", "{\"IsFullscreen\":" + isFullscreen + "}");
+    }
+}
+
 
 // Handle TCP messages received from clients
 void onIncomingTcpMessage(const Client& client, const char* msg, size_t size)
@@ -78,8 +108,12 @@ void MPCTCPServer::sendStateToClient(const Client& client)
     CMainFrame* frame = MPCTCPServer::innerMainFrame;
 
     sendPlaybackStatusToClient(client);
+
     std::string playbackPositionParameter = getPlaybackPositionParameter(std::lround(frame->GetPos() / 10000i64), std::lround(frame->GetDur() / 10000i64));
     sendMessageToSpecificClient(client, "Position", playbackPositionParameter);
+
+    std::string isFullscreen = frame->m_fFullScreen ? "true" : "false";
+    sendMessageToSpecificClient(client, "Fullscreen", "{\"IsFullscreen\":" + isFullscreen + "}");
 }
 
 /// <summary>
