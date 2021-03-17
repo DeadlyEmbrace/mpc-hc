@@ -59,6 +59,12 @@ void MPCTCPServer::handleIncomingTcpMessage(const Client& client, const char* ms
             return;
         }
 
+        if (command == "GetAPIVersion")
+        {
+            sendMessageToSpecificClient(client, "APIVersion", "{\"Version\": \"1.0.0\"}");
+            return;
+        }
+
         CMainFrame* frame = MPCTCPServer::innerMainFrame;
         TcpCommand* tcpCommand = new TcpCommand();
         tcpCommand->Command = command;

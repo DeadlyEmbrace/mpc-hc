@@ -16616,6 +16616,13 @@ LRESULT CMainFrame::OnTcpMessage(WPARAM wParam, LPARAM lParam)
     {
         OnApiPause();
     }
+    if (data->Command == "OSD")
+    {
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::wstring wide = converter.from_bytes(data->Parameters);
+        LPCWSTR result = wide.c_str();
+        m_OSD.DisplayMessage(OSD_TOPLEFT, result);
+    }
 
     return 0;
 }
